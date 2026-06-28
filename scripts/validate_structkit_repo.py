@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a StructKit skill/template repository.
-
-The script intentionally uses only the Python standard library unless PyYAML is
-available. When the `structkit` CLI is installed, it also validates all template
-structures with StructKit itself.
-"""
+"""Validate a StructKit skill/template repository."""
 from __future__ import annotations
 
 import re
@@ -14,7 +9,7 @@ import sys
 from pathlib import Path
 
 REQUIRED_FRONTMATTER = {"name", "description", "version"}
-SECRET_PATTERNS = [
+PATTERNS = [
     re.compile(r"AKIA[0-9A-Z]{16}"),
     re.compile(r"(?i)(api[_-]?key|token|secret)\s*[:=]\s*['\"]?[A-Za-z0-9_\-]{24,}"),
 ]
@@ -48,7 +43,7 @@ def validate_skill_files(root: Path) -> list[str]:
             missing = REQUIRED_FRONTMATTER - set(fm)
             if missing:
                 errors.append(f"{path}: missing frontmatter keys: {sorted(missing)}")
-        except Exception as exc:  # noqa: BLE001 - report all validation failures
+        except Exception as exc:
             errors.append(str(exc))
     return errors
 
@@ -63,7 +58,7 @@ def validate_yaml_parse(paths: list[Path]) -> list[str]:
     for path in paths:
         try:
             yaml.safe_load(path.read_text(encoding="utf-8"))
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             errors.append(f"{path}: YAML parse failed: {exc}")
     return errors
 
@@ -87,13 +82,13 @@ def validate_with_structkit(paths: list[Path]) -> list[str]:
     return errors
 
 
-def scan_for_secrets(root: Path) -> list[str]:
+def scan_for_sensitive_placeholders(root: Path) -> list[str]:
     errors: list[str] = []
     for path in root.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        for pattern in SECRET_PATTERNS:
+        for pattern in PATTERNS:
             if pattern.search(text):
                 errors.append(f"{path}: possible secret-like value found")
     return errors
@@ -107,7 +102,7 @@ def main() -> int:
     errors.extend(validate_skill_files(root))
     errors.extend(validate_yaml_parse(struct_files))
     errors.extend(validate_with_structkit(struct_files))
-    errors.extend(scan_for_secrets(root))
+    errors.extend(scan_for_sensitive_placeholders(root))
 
     if errors:
         print("Validation failed:")
@@ -115,7 +110,8 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print(f"Validation passed: {len(struct_files)} StructKit template(s), {len(list(root.glob('**/SKILL.md')))} skill file(s)")
+    skill_count = len(list(root.glob("**/SKILL.md")))
+    print(f"Validation passed: {len(struct_files)} StructKit template(s), {skill_count} skill file(s)")
     return 0
 
 
