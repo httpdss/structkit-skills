@@ -11,9 +11,6 @@ variables:
       type: string
       default: example-project
 
-folders:
-  - src: {}
-
 files:
   - README.md:
       skip_if_exists: true
@@ -21,7 +18,14 @@ files:
         # {{@ project_name @}}
 
         Generated with StructKit.
+
+  - src/__init__.py:
+      skip_if_exists: true
+      content: |
+        """{{@ project_name @}} package."""
 ```
+
+Use `folders` for nested structures, not for empty folder creation. For plain folders, generate a file inside the directory or use a nested structure with `struct`.
 
 ## Guidelines
 

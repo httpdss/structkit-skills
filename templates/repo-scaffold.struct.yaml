@@ -8,10 +8,6 @@ variables:
       type: string
       default: Generated repository scaffold.
 
-folders:
-  - docs: {}
-  - scripts: {}
-
 files:
   - README.md:
       skip_if_exists: true
