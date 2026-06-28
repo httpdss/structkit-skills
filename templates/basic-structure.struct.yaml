@@ -1,0 +1,28 @@
+variables:
+  - project_name:
+      description: Name of the generated project.
+      type: string
+      default: hello-structkit
+
+folders:
+  - src: {}
+  - tests: {}
+
+files:
+  - README.md:
+      skip_if_exists: true
+      content: |
+        # {{@ project_name @}}
+
+        Generated with StructKit.
+
+  - src/__init__.py:
+      skip_if_exists: true
+      content: |
+        """{{@ project_name @}} package."""
+
+  - tests/test_smoke.py:
+      skip_if_exists: true
+      content: |
+        def test_smoke():
+            assert True

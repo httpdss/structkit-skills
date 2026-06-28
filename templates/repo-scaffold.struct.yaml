@@ -1,0 +1,41 @@
+variables:
+  - repo_name:
+      description: Repository name to render into docs and package metadata.
+      type: string
+      default: example-repo
+  - description:
+      description: Short repository description.
+      type: string
+      default: Generated repository scaffold.
+
+folders:
+  - docs: {}
+  - scripts: {}
+
+files:
+  - README.md:
+      skip_if_exists: true
+      content: |
+        # {{@ repo_name @}}
+
+        {{@ description @}}
+
+        ## Development
+
+        ```bash
+        python scripts/check.py
+        ```
+
+  - scripts/check.py:
+      permissions: '0755'
+      skip_if_exists: true
+      content: |
+        #!/usr/bin/env python3
+        print("{{@ repo_name @}} checks passed")
+
+  - docs/index.md:
+      skip_if_exists: true
+      content: |
+        # {{@ repo_name @}} documentation
+
+        {{@ description @}}
