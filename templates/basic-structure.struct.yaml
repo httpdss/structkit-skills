@@ -4,6 +4,12 @@ variables:
       type: string
       default: hello-structkit
 
+folders:
+  - src:
+      struct: []
+  - tests:
+      struct: []
+
 files:
   - README.md:
       skip_if_exists: true
