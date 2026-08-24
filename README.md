@@ -1,8 +1,6 @@
 # StructKit Skills
 
-Agent skills and workflow guidance for using [StructKit](https://github.com/httpdss/structkit) safely and repeatably.
-
-This repository currently ships one installable skill:
+Companion to [StructKit](https://github.com/httpdss/structkit). Agent skills so an assistant inspects, previews, generates, and validates from your YAML. Star the [core repo](https://github.com/httpdss/structkit).
 
 - [`structkit-workflows`](./SKILL.md) — inspect, preview, generate, validate, and author StructKit structures.
 
