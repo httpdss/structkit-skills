@@ -15,6 +15,7 @@ Run the equivalent of:
 ```bash
 structkit info <structure>
 structkit vars <structure>
+structkit config print
 ```
 
 If using custom structures:
@@ -29,7 +30,7 @@ structkit vars -s ./structures <structure>
 Prefer a dry run with a diff:
 
 ```bash
-structkit generate <structure> ./target --dry-run --diff --vars key=value
+structkit generate <structure> ./target --dry-run --diff --no-hooks --vars key=value
 ```
 
 If dedicated agent tools exist, use `structkit_preview`.
@@ -47,9 +48,11 @@ Recommended defaults:
 
 Use the exact values from the preview. Do not silently change variables, mappings files, output path, or structures path between preview and generation.
 
+Skip hooks unless the user asked to run them. StructKit 3.3.0+ supports `--no-hooks`, `STRUCTKIT_NO_HOOKS=true`, `.struct-hooks-allowlist`, and MCP `no_hooks` (default true).
+
 ## 6. Verify
 
-- Validate changed `.struct.yaml` files.
+- Validate changed `.structkit.yaml` files. Legacy `.struct.yaml` is still read.
 - Inspect `git diff --check` when inside a Git repo.
 - Run relevant tests/lints/builds for generated code.
 - Report generated paths and real verification output.

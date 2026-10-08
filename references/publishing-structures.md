@@ -42,5 +42,6 @@ Only split when the trigger conditions are truly different; otherwise keep one u
 - [ ] `SKILL.md` version is updated.
 - [ ] Validation workflow passes.
 - [ ] Templates validate with StructKit.
+- [ ] New project files use `.structkit.yaml` (legacy `.struct.yaml` is still read).
 - [ ] Examples do not contain secrets.
 - [ ] Tags/releases describe behavior changes.

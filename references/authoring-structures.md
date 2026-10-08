@@ -39,9 +39,11 @@ Use `folders` for nested structures, not for empty folder creation. For plain fo
 
 ## Validation workflow
 
+Prefer `.structkit.yaml` (or `*.structkit.yaml`) as the structure filename; `structkit init` creates `.structkit.yaml`. Legacy `.struct.yaml` is still read.
+
 ```bash
-structkit validate ./structures/my-structure.struct.yaml
-structkit generate ./structures/my-structure.struct.yaml /tmp/structkit-preview --dry-run --diff --vars project_name=demo
+structkit validate ./structures/my-structure.structkit.yaml
+structkit generate ./structures/my-structure.structkit.yaml /tmp/structkit-preview --dry-run --diff --no-hooks --vars project_name=demo
 ```
 
 If the structure references remote files, test both normal network behavior and offline behavior where possible.

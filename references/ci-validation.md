@@ -5,7 +5,7 @@ A StructKit skill/template repository should catch broken YAML and broken exampl
 Minimum checks:
 
 1. Verify every `SKILL.md` has frontmatter with `name`, `description`, and `version`.
-2. Verify every `*.struct.yaml` / `*.struct.yml` parses as YAML.
+2. Verify every `.structkit.yaml` / `.structkit.yml` and `*.structkit.yaml` / `*.structkit.yml` parses as YAML. Legacy `.struct.yaml` / `.struct.yml` and `*.struct.yaml` / `*.struct.yml` names are still read.
 3. Run `structkit validate` for every template structure when StructKit is installed.
 4. Scan examples for obvious placeholder secrets.
 
@@ -28,6 +28,7 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install --upgrade pip
       - run: python -m pip install structkit pyyaml
+      - run: python -m unittest discover -s tests -p 'test_*.py'
       - run: python scripts/validate_structkit_repo.py .
 ```
 
