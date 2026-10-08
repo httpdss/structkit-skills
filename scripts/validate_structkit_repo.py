@@ -13,6 +13,14 @@ PATTERNS = [
     re.compile(r"AKIA[0-9A-Z]{16}"),
     re.compile(r"(?i)(api[_-]?key|token|secret)\s*[:=]\s*['\"]?[A-Za-z0-9_\-]{24,}"),
 ]
+# Canonical project files (.structkit.yaml / .structkit.yml), named structures
+# (*.structkit.yaml / *.structkit.yml), and legacy .struct.yaml / *.struct.yaml names.
+STRUCT_FILE_SUFFIXES = (
+    ".structkit.yaml",
+    ".structkit.yml",
+    ".struct.yaml",
+    ".struct.yml",
+)
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -82,6 +90,26 @@ def validate_with_structkit(paths: list[Path]) -> list[str]:
     return errors
 
 
+def is_struct_file(path: Path) -> bool:
+    return path.name.endswith(STRUCT_FILE_SUFFIXES)
+
+
+def find_struct_files(root: Path) -> list[Path]:
+    """Find canonical, named, and legacy StructKit YAML files.
+
+    Path.glob('**/*.struct.yaml') does not match hidden names such as
+    ``.structkit.yaml`` on Python 3.11 (CI), so we walk the tree and match
+    suffixes instead of relying on glob alone.
+    """
+    files: set[Path] = set()
+    for path in root.rglob("*"):
+        if not path.is_file() or ".git" in path.parts:
+            continue
+        if is_struct_file(path):
+            files.add(path)
+    return sorted(files)
+
+
 def scan_for_sensitive_placeholders(root: Path) -> list[str]:
     errors: list[str] = []
     for path in root.rglob("*"):
@@ -96,7 +124,7 @@ def scan_for_sensitive_placeholders(root: Path) -> list[str]:
 
 def main() -> int:
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-    struct_files = sorted(root.glob("**/*.struct.yaml")) + sorted(root.glob("**/*.struct.yml"))
+    struct_files = find_struct_files(root)
 
     errors: list[str] = []
     errors.extend(validate_skill_files(root))

@@ -38,7 +38,7 @@ hermes skills tap add httpdss/structkit-skills
 - Inspect structures and variables before generation.
 - Preview diffs before writing files.
 - Avoid overwrites unless explicitly requested.
-- Validate `.struct.yaml` files and generated outputs.
+- Validate `.structkit.yaml` files and generated outputs. Legacy `.struct.yaml` is still read.
 - Keep custom structures reusable, composable, and CI-checked.
 
 ## Repository layout
