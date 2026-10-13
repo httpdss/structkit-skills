@@ -3,7 +3,7 @@ name: structkit-workflows
 description: Use StructKit to inspect, preview, generate, validate, and author project structures safely.
 version: 0.2.0
 author: httpdss
-license: MIT
+license: Apache-2.0
 metadata:
   hermes:
     tags:
